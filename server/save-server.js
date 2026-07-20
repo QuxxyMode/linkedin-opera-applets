@@ -26,7 +26,7 @@ const { exec } = require('child_process');
 
 const PORT = 17845;
 const TOKEN = 'lext-9f3c7a2b1e4d6f80';
-const OUTPUT_PATH = path.join(__dirname, '..', 'Трекер откликов - AB тест.xlsx');
+const OUTPUT_PATH = path.join(__dirname, '..', 'Applications log.xlsx');
 
 // Column layout of the "Отклики" sheet. A-D and F are ours (the extension
 // writes them); E and G-L are yours (CV version, response, interview,
@@ -744,7 +744,7 @@ async function appendRecords(records) {
 // rotation if one backup back isn't enough of a safety margin.
 // ---------------------------------------------------------------------
 
-const BACKUP_PATH = path.join(__dirname, '..', 'Трекер откликов - AB тест.backup.xlsx');
+const BACKUP_PATH = path.join(__dirname, '..', 'Applications log.backup.xlsx');
 
 // `${source}:${jobId}` -> full record (every column), reconstructed from
 // cell text + the hyperlink targets already parsed elsewhere in this file.

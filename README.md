@@ -20,7 +20,7 @@ A browser extension (Opera, Chrome, Edge, Brave, or any other Chromium-based bro
 1. Install [Node.js](https://nodejs.org/) (any current version) - needed for the local server that writes the Excel file.
 2. Load the extension: open `opera://extensions` (or `chrome://extensions`, `edge://extensions`) → enable **Developer mode** → **Load unpacked** → select this folder.
 3. Start the local server: double-click `server/start-server.bat` (Windows) or `server/start-server.command` (macOS/Linux). Leave that window open.
-4. Browse LinkedIn or Indeed as usual. Every application gets logged automatically into **`Трекер откликов - AB тест.xlsx`**, created next to the extension the first time it's needed - already set up with drop-downs and a stats sheet, no setup required.
+4. Browse LinkedIn or Indeed as usual. Every application gets logged automatically into **`Applications log.xlsx`**, created next to the extension the first time it's needed - already set up with drop-downs and a stats sheet, no setup required.
 
 Details on each step below.
 
@@ -45,7 +45,7 @@ Browser extensions can't write files to disk directly, so a small local companio
    - **Any OS, from a terminal**: `node server/save-server.js`.
 
    You should see a message ending in `listening on http://127.0.0.1:17845`. Leave that window open while you use the extension.
-3. New applications are appended straight into **`Трекер откликов - AB тест.xlsx`**, next to the extension itself. If that file doesn't exist yet, the server creates it automatically from a bundled template on the first application, complete with the "Отклики" sheet (drop-downs for CV version and Yes/No fields included), a "List CVs" sheet (three example rows - rename/replace them with your own CVs), and a formula-driven "Статистика" sheet - nothing to set up by hand.
+3. New applications are appended straight into **`Applications log.xlsx`**, next to the extension itself. If that file doesn't exist yet, the server creates it automatically from a bundled template on the first application, complete with the "Отклики" sheet (drop-downs for CV version and Yes/No fields included), a "List CVs" sheet (three example rows - rename/replace them with your own CVs), and a formula-driven "Статистика" sheet - nothing to set up by hand.
 4. The extension fills in **date, company, vacancy, link, source, and (if you picked one) CV version** - the rest of the columns (response, response date, interview, second stage, offer, notes) are yours to fill in by hand as you follow up on each application. The extension never touches or overwrites those columns.
 
 **Launching it automatically at login** (optional):
@@ -57,7 +57,7 @@ If the server isn't running when you apply to a job, nothing is lost - it's queu
 
 ### Backups
 
-Every 30 minutes, the server backs up `Трекер откликов - AB тест.xlsx` to `Трекер откликов - AB тест.backup.xlsx` (same folder). Before doing so, it compares the two: if a row exists in the backup but not in the live file (e.g. it got overwritten or corrupted by something else), that row is automatically re-appended before the backup is refreshed. This is a single rolling backup, not a dated history — if you need to go back further than the last cycle, use your own backup tool for that.
+Every 30 minutes, the server backs up `Applications log.xlsx` to `Applications log.backup.xlsx` (same folder). Before doing so, it compares the two: if a row exists in the backup but not in the live file (e.g. it got overwritten or corrupted by something else), that row is automatically re-appended before the backup is refreshed. This is a single rolling backup, not a dated history — if you need to go back further than the last cycle, use your own backup tool for that.
 
 ### Opening the spreadsheet
 
