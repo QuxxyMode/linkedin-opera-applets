@@ -9,7 +9,7 @@ A browser extension (Opera, Chrome, Edge, Brave, or any other Chromium-based bro
 - Adds a small **"AA"** (Already Applied) badge before the title of any job already marked Applied, so it stands out even with hiding turned off.
 - On Indeed - which has no built-in "applied" tracking - adds a **"Mark as Applied"** button, plus the same "AA" badge once a job is marked.
 - On LinkedIn and Indeed, a **CV picker** appears near the Apply/Mark-as-Applied button - pick which CV you're sending before applying, and it's recorded into the "Версия CV" column alongside that application. The list comes from the "List CVs" sheet in the workbook - add a row there for each CV you want to choose from. Turn this off in the popup ("Record which CV was sent") if you don't want to bother with it.
-- **Any other job site**: a floating **"Record application"** button (togglable in the popup) - click it, then click the job title and the company name on the page, pick a CV if you want, and it's recorded. No setup, nothing taught in advance - and it still hides/badges that job if you see it again in a list later.
+- **Any other job site**: a floating **"Record application"** button (togglable in the popup) - click it, then click the job title and the company name on the page, pick a CV if you want, and it's recorded. No setup, nothing taught in advance. If you're looking at a job you've already applied to (checked against the actual spreadsheet, not just this browser's memory), the button turns green and shows the date, and a badge with that same date appears right next to the job title if you see it again in a list.
 - **Hide by company**: a small eye icon next to each job lets you hide every listing from a company you're not interested in (toggle in the popup to show/hide them).
 - Counts how many jobs were marked Applied/Viewed **today** and shows the counters in the popup.
 - Logs every application straight into one Excel workbook (see below) - no downloads, no popups from the browser.
@@ -63,14 +63,18 @@ Every 30 minutes, the server backs up `Трекер откликов - AB тес
 
 The popup's **"Open spreadsheet"** button opens the file directly (or its folder, if that's not possible).
 
+## Browser compatibility
+
+Built and tested on **Chromium-based browsers** - Opera, Chrome, Edge, Brave, Vivaldi, and any other browser built on Chromium. It uses the standard `chrome.*` extension APIs and Manifest V3, nothing Opera-specific, so it should behave identically across all of them.
+
+**Firefox is not currently supported.** Firefox's Manifest V3 implementation differs enough (background script model, permanent-install signing requirements) that this would need real changes and testing before it could be recommended there.
+
 ## Privacy
 
 Nothing is sent anywhere except to the local server running on your own machine (`127.0.0.1`). No external servers, no tracking.
 
 ## Support
 
-If you got this extension for free and it's saved you some time, feel free to send the author a tip - any amount you're comfortable with. Completely optional, no strings attached.
+If you got this extension for free and it's saved you some time, feel free to leave a tip - any amount you're comfortable with. Completely optional, no strings attached.
 
-```
-USDT (TRC20): TXdFZ9KKXVprBkqe11ZYK6tF8kKKEVq7Mg
-```
+**[donationalerts.com/r/quxxy_mod](https://www.donationalerts.com/r/quxxy_mod)**

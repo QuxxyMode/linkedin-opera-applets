@@ -24,6 +24,14 @@
   background: #084d94;
 }
 
+.lext-record-fab.lext-record-fab-done {
+  background: #1a7f37;
+}
+
+.lext-record-fab.lext-record-fab-done:hover {
+  background: #14652c;
+}
+
 .lext-record-toolbar {
   position: fixed;
   top: 12px;

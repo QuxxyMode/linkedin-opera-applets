@@ -341,6 +341,37 @@ function buildFreshTrackerXlsx() {
 }
 
 // ---------------------------------------------------------------------
+// Full title/company/source/date index: lets a content script on a site
+// with no taught DOM selector (genericContent.js) recognize "you already
+// applied here" purely by text match, with the real recorded date — not
+// just whatever it happens to remember from this browser session.
+// ---------------------------------------------------------------------
+
+function listApplications() {
+  const existingParts = readXlsxParts(OUTPUT_PATH);
+  if (!existingParts) return [];
+
+  const worksheetName = findWorksheetPartName(existingParts);
+  const sheetXml = existingParts.get(worksheetName)?.toString('utf8');
+  if (!sheetXml) return [];
+  const sharedStrings = parseSharedStrings(existingParts);
+  const rowTexts = readRowTexts(sheetXml, sharedStrings);
+
+  const results = [];
+  for (const [row, texts] of rowTexts.entries()) {
+    if (row === 1) continue; // header
+    if (!texts[COL.TITLE] && !texts[COL.COMPANY]) continue;
+    results.push({
+      title: texts[COL.TITLE] || '',
+      company: texts[COL.COMPANY] || '',
+      source: texts[COL.SOURCE] || '',
+      date: texts[COL.DATE] || '',
+    });
+  }
+  return results;
+}
+
+// ---------------------------------------------------------------------
 // Missing-link discovery + backfill: an old row can have a title/company
 // name with no hyperlink at all (recorded before the row's href was
 // available, or typed in by hand) — this lets the content script recognize
@@ -965,7 +996,7 @@ function readJsonBody(req) {
 const server = http.createServer(async (req, res) => {
   const knownRoute =
     (req.method === 'POST' && ['/append', '/patch', '/backfill-link', '/open', '/hidden-companies'].includes(req.url)) ||
-    (req.method === 'GET' && ['/missing-links', '/cv-list'].includes(req.url));
+    (req.method === 'GET' && ['/missing-links', '/cv-list', '/applied-index'].includes(req.url));
   if (!knownRoute) {
     res.writeHead(404);
     res.end();
@@ -996,6 +1027,9 @@ const server = http.createServer(async (req, res) => {
     } else if (req.method === 'GET' && req.url === '/cv-list') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(readCvList()));
+    } else if (req.method === 'GET' && req.url === '/applied-index') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(listApplications()));
     } else if (req.url === '/append') {
       const records = Array.isArray(body.records) ? body.records : [];
       if (!records.length) {

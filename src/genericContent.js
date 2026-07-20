@@ -57,14 +57,21 @@
     card.classList.toggle('lext-hidden', shouldHideCard(card));
   }
 
-  function markApplied(card) {
+  function markApplied(card, date) {
     if (card.dataset.lextAaBadge === '1') return;
     card.dataset.lextAaBadge = '1';
     const badge = document.createElement('span');
     badge.className = 'lext-aa-badge';
-    badge.textContent = 'AA';
-    badge.title = 'Already Applied';
+    badge.textContent = date ? `AA · ${date}` : 'AA';
+    badge.title = date ? `Already Applied — ${date}` : 'Already Applied';
     card.insertBefore(badge, card.firstChild);
+  }
+
+  function todayDisplay() {
+    const d = new Date();
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    return `${dd}.${mm}.${d.getFullYear()}`;
   }
 
   // No reliable "you already applied" page state to read back on an
@@ -73,13 +80,28 @@
   const APPLIED_STORAGE_KEY = `genericApplied_${SITE_KEY}`;
   let appliedIds = new Set();
 
-  // Every job recorded via the picker, kept just so a later visit to a
-  // list page on the same site can spot it again and hide/badge it — see
-  // markRecordedJobsOnPage() below. Global across all generic sites (each
-  // entry carries its own `source`), capped so it can't grow forever.
+  // Every job recorded via the picker on *this* browser, kept so a later
+  // visit to a list page on the same site can spot it again and hide/badge
+  // it immediately — see markRecordedJobsOnPage() below. Global across all
+  // generic sites (each entry carries its own `source`), capped so it
+  // can't grow forever.
   const RECORDED_JOBS_KEY = 'recordedJobs';
   const MAX_RECORDED_JOBS = 500;
   let recordedJobs = [];
+
+  // The real tracker workbook's title/company/source/date, synced from the
+  // local server every couple minutes (src/background.js) — catches
+  // applications recorded from another browser/device, or typed in by
+  // hand, that `recordedJobs` alone (this browser's own memory) wouldn't
+  // know about. `recordedJobs` still matters on top of this for the
+  // seconds/minutes right after recording, before the next sync lands.
+  let appliedIndex = [];
+
+  function getKnownApplications() {
+    const mine = recordedJobs.filter((j) => j.source === SITE_KEY);
+    const synced = appliedIndex.filter((j) => j.source === SITE_KEY);
+    return mine.concat(synced);
+  }
 
   // ---------------------------------------------------------------------
   // Finding the repeating "card" ancestor for a matched title: walk up
@@ -124,10 +146,10 @@
   }
 
   function markRecordedJobsOnPage() {
-    const mine = recordedJobs.filter((j) => j.source === SITE_KEY);
-    if (!mine.length) return;
+    const known = getKnownApplications();
+    if (!known.length) return;
     const index = buildTextIndex();
-    for (const job of mine) {
+    for (const job of known) {
       const titleEls = index.get(normalizeText(job.title));
       if (!titleEls) continue;
       for (const titleEl of titleEls) {
@@ -135,10 +157,28 @@
         if (card.dataset.lextStatus === STATUS_APPLIED) continue;
         if (job.company && !normalizeText(card.textContent).includes(normalizeText(job.company))) continue;
         card.dataset.lextStatus = STATUS_APPLIED;
-        markApplied(card);
+        markApplied(card, job.date);
         applyVisibility(card);
       }
     }
+  }
+
+  // Whether the current page itself (not necessarily a list of cards) is
+  // about a job already recorded — e.g. you've come back to a detail page
+  // you applied from before. A plain whole-page text check rather than the
+  // card-matching above, since a lone detail page usually isn't shaped
+  // like a repeating list item findCardRoot() could bound sensibly.
+  function findKnownApplicationOnPage() {
+    const known = getKnownApplications();
+    if (!known.length) return null;
+    const pageText = normalizeText(document.body.textContent);
+    for (const job of known) {
+      const title = normalizeText(job.title);
+      if (title.length < 3 || !pageText.includes(title)) continue;
+      if (job.company && !pageText.includes(normalizeText(job.company))) continue;
+      return job;
+    }
+    return null;
   }
 
   // ---------------------------------------------------------------------
@@ -235,7 +275,7 @@
     appliedIds.add(jobId);
     chrome.storage.local.set({ [APPLIED_STORAGE_KEY]: Array.from(appliedIds) });
 
-    recordedJobs.push({ source: SITE_KEY, title: pickedTitle, company: pickedCompany });
+    recordedJobs.push({ source: SITE_KEY, title: pickedTitle, company: pickedCompany, date: todayDisplay() });
     if (recordedJobs.length > MAX_RECORDED_JOBS) recordedJobs = recordedJobs.slice(-MAX_RECORDED_JOBS);
     chrome.storage.local.set({ [RECORDED_JOBS_KEY]: recordedJobs });
 
@@ -315,17 +355,32 @@
       fabEl = null;
       return;
     }
-    if (fabEl) return;
-    fabEl = document.createElement('button');
-    fabEl.type = 'button';
-    fabEl.className = 'lext-record-fab';
-    fabEl.textContent = '📌 Record application';
-    fabEl.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      startRecording();
-    });
-    document.body.appendChild(fabEl);
+    if (!fabEl) {
+      fabEl = document.createElement('button');
+      fabEl.type = 'button';
+      fabEl.className = 'lext-record-fab';
+      fabEl.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        startRecording();
+      });
+      document.body.appendChild(fabEl);
+    }
+
+    // Reflect whether this page is about a job already in the tracker —
+    // doesn't block re-recording (a reposted job is a legitimate reason
+    // to record it again), just surfaces the date so you don't have to
+    // wonder or go check the spreadsheet.
+    if (recordStep) return; // don't relabel the button mid-flow
+    const known = findKnownApplicationOnPage();
+    fabEl.classList.toggle('lext-record-fab-done', !!known);
+    if (known) {
+      fabEl.textContent = '✓ Already applied';
+      fabEl.title = `Applied${known.date ? ' on ' + known.date : ''} to "${known.title}"${known.company ? ' at ' + known.company : ''}. Click to record again.`;
+    } else {
+      fabEl.textContent = '📌 Record application';
+      fabEl.title = '';
+    }
   }
 
   document.addEventListener('mouseover', onMouseOver, true);
@@ -356,6 +411,7 @@
       cvPickerEnabled: true,
       [APPLIED_STORAGE_KEY]: [],
       [RECORDED_JOBS_KEY]: [],
+      appliedIndex: [],
     },
     (res) => {
       settings = {
@@ -365,6 +421,7 @@
       };
       appliedIds = new Set(res[APPLIED_STORAGE_KEY]);
       recordedJobs = res[RECORDED_JOBS_KEY] || [];
+      appliedIndex = res.appliedIndex || [];
       scanAll();
     }
   );
@@ -389,6 +446,10 @@
     }
     if (changes[RECORDED_JOBS_KEY]) {
       recordedJobs = changes[RECORDED_JOBS_KEY].newValue || [];
+      scanAll();
+    }
+    if (changes.appliedIndex) {
+      appliedIndex = changes.appliedIndex.newValue || [];
       scanAll();
     }
   });

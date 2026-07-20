@@ -78,6 +78,21 @@ async function refreshCvList() {
   }
 }
 
+// Full title/company/source/date list straight from the tracker workbook —
+// lets genericContent.js recognize "you already applied here" on a site
+// with no taught DOM selector, by text match, with the real recorded date
+// (not just whatever it happens to remember locally from this browser).
+async function refreshAppliedIndex() {
+  try {
+    const res = await getJson('/applied-index');
+    if (!res.ok) return;
+    const appliedIndex = await res.json();
+    await chrome.storage.local.set({ appliedIndex });
+  } catch (e) {
+    // Server not running — leave whatever was cached before.
+  }
+}
+
 // Mirrors the "Hide this company" list onto a second sheet in the
 // spreadsheet, purely so it's visible somewhere outside the popup — the
 // server always rebuilds that sheet wholesale from the full list rather
@@ -278,6 +293,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     enqueue(refreshMissingLinks);
     enqueue(syncHiddenCompanies);
     enqueue(refreshCvList);
+    enqueue(refreshAppliedIndex);
   }
 });
 
@@ -288,6 +304,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
 });
 enqueue(refreshMissingLinks);
 enqueue(refreshCvList);
+enqueue(refreshAppliedIndex);
 
 chrome.runtime.onInstalled.addListener(async () => {
   await chrome.storage.local.get({ hideApplied: false, hideViewed: false });
