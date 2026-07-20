@@ -1,0 +1,78 @@
+/*
+ * Collapsed instead of display:none — the card must stay clickable so the
+ * user can still open/apply to it (e.g. LinkedIn marks a job "Viewed" the
+ * moment it's opened, so a hard display:none would make it impossible to
+ * ever click "Apply" on it again).
+ */
+.lext-hidden {
+  max-height: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  cursor: pointer !important;
+  transition: max-height 0.15s ease, opacity 0.15s ease;
+}
+
+.lext-hidden:hover,
+.lext-hidden:focus-within {
+  max-height: 3000px !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+}
+
+.lext-aa-badge {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 1px 5px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #fff;
+  background: #0a66c2;
+  border-radius: 3px;
+  vertical-align: middle;
+}
+
+.lext-hide-company-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1;
+  background: none;
+  border: none;
+  cursor: pointer;
+  vertical-align: middle;
+  opacity: 0.85;
+}
+
+.lext-hide-company-btn:hover {
+  opacity: 1;
+}
+
+.lext-hide-company-btn.lext-company-hidden {
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+
+/* LinkedIn's action-button row is laid out with CSS Grid/Flexbox, which
+   can auto-place an unplanned-for extra child into the same cell/line as
+   an existing button instead of giving it a new row — these overrides
+   force it onto its own full-width line regardless of which of the two
+   the parent turns out to be. */
+.lext-cv-picker {
+  display: block !important;
+  position: static !important;
+  grid-column: 1 / -1 !important;
+  grid-row: auto !important;
+  flex-basis: 100% !important;
+  flex-grow: 0 !important;
+  flex-shrink: 0 !important;
+  order: 999 !important;
+  width: 100%;
+  max-width: 320px;
+  margin-top: 6px;
+}

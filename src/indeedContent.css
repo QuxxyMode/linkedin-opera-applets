@@ -1,0 +1,62 @@
+.lext-indeed-applied-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  margin-left: 8px;
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: #2557a7;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.lext-indeed-applied-btn:hover:not(:disabled) {
+  background: #1c4483;
+}
+
+.lext-indeed-applied-btn:disabled,
+.lext-indeed-applied-btn.lext-indeed-applied-done {
+  background: #1a7f37;
+  cursor: default;
+  opacity: 1;
+}
+
+.lext-cv-picker {
+  margin-left: 8px;
+  max-width: 260px;
+  vertical-align: middle;
+}
+
+.lext-aa-badge {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 1px 5px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #fff;
+  background: #2557a7;
+  border-radius: 3px;
+  vertical-align: middle;
+}
+
+/* Collapsed instead of display:none — hover/focus still reveals the card,
+   same behavior as the LinkedIn side (see content.css). */
+.lext-hidden {
+  max-height: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  cursor: pointer !important;
+  transition: max-height 0.15s ease, opacity 0.15s ease;
+}
+
+.lext-hidden:hover,
+.lext-hidden:focus-within {
+  max-height: 3000px !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+}

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>LinkedIn Applied/Viewed</title>
+<link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <h1>LinkedIn: Applied / Viewed</h1>
+
+  <div class="row">
+    <label><input type="checkbox" id="hideApplied" /> Hide Applied jobs</label>
+  </div>
+  <div class="row">
+    <label><input type="checkbox" id="hideViewed" /> Hide Viewed jobs</label>
+  </div>
+
+  <hr />
+
+  <div class="row">
+    <label><input type="checkbox" id="hideRemote" /> Hide Remote jobs</label>
+  </div>
+  <div class="row">
+    <label><input type="checkbox" id="hideHybrid" /> Hide Hybrid jobs</label>
+  </div>
+  <div class="row">
+    <label><input type="checkbox" id="hideOnsite" /> Hide On-site jobs</label>
+  </div>
+  <p class="hint">LinkedIn only.</p>
+
+  <hr />
+
+  <div class="row">
+    <label><input type="checkbox" id="hideUninterestedCompanies" /> Hide uninterested companies</label>
+  </div>
+  <p class="hint">Click the 👁️ icon on a job card to add its company to the list (see the "Hidden Companies" tab in the spreadsheet).</p>
+
+  <hr />
+
+  <div class="row" id="learnSection" hidden>
+    <p class="hint">Teach job fields on <strong id="learnSiteName"></strong>:</p>
+    <button id="learnBtn"></button>
+    <button id="forgetBtn" hidden>Forget this site</button>
+  </div>
+
+  <hr />
+
+  <div class="stats">
+    <div class="stat">
+      <span id="appliedToday">0</span>
+      <small>applied today</small>
+    </div>
+    <div class="stat">
+      <span id="viewedToday">0</span>
+      <small>viewed today</small>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="row">
+    <button id="openFile">Open spreadsheet</button>
+  </div>
+  <p class="row error" id="openFileError" hidden>
+    Couldn't reach the local server — make sure it's running.
+  </p>
+  <p class="row" id="pendingHint" hidden>
+    Queued: <span id="pendingCount">0</span> — waiting for the local server
+  </p>
+
+  <p class="hint">
+    Applications are appended to<br />
+    <code>applied_jobs.xlsx</code> (next to the extension) via the local server.
+  </p>
+
+  <script src="popup.js"></script>
+</body>
+</html>

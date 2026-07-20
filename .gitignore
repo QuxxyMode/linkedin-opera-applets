@@ -1,0 +1,13 @@
+# Personal data - never commit these
+Трекер откликов - AB тест.xlsx
+Трекер откликов - AB тест.backup.xlsx
+Трекер откликов - AB тест.template-backup-*.xlsx
+applied_jobs.xlsx
+applied_jobs.backup.xlsx
+CVs/
+
+# Build output - regenerate with build_release.py
+dist/
+
+# Editor
+.vscode/

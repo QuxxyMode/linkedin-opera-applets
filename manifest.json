@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "LinkedIn: Hide Applied/Viewed Jobs",
+  "version": "1.0.0",
+  "description": "Hides/shows LinkedIn jobs marked Applied/Viewed, lets you mark Indeed jobs as applied, and keeps a combined Excel log of your applications.",
+  "permissions": ["storage", "alarms"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.linkedin.com/*"],
+      "js": ["src/content.js"],
+      "css": ["src/content.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.indeed.com/*"],
+      "js": ["src/indeedContent.js"],
+      "css": ["src/indeedContent.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["<all_urls>"],
+      "exclude_matches": ["*://*.linkedin.com/*", "*://*.indeed.com/*"],
+      "js": ["src/genericContent.js"],
+      "css": ["src/content.css", "src/genericContent.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "src/popup.html",
+    "default_title": "LinkedIn Applied/Viewed"
+  }
+}
