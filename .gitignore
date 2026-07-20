@@ -6,6 +6,9 @@ applied_jobs.xlsx
 applied_jobs.backup.xlsx
 CVs/
 
+# Excel lock files (created while a workbook is open)
+~$*.xlsx
+
 # Build output - regenerate with build_release.py
 dist/
 
