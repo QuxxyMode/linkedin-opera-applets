@@ -87,7 +87,7 @@
       { type: 'JOB_SEEN', jobId, status: 'applied', source: SOURCE, cvVersion: selectedCvByJobId.get(jobId), ...info },
       () => {
         if (chrome.runtime.lastError) {
-          console.warn('LinkedIn Opera Applets (Indeed): sendMessage failed', chrome.runtime.lastError.message);
+          console.warn('Apply Tracker (Indeed): sendMessage failed', chrome.runtime.lastError.message);
         }
       }
     );

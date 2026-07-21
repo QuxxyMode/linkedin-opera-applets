@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 'use strict';
 
-// Local companion service for the "LinkedIn: Hide Applied/Viewed Jobs"
-// extension. Run this alongside the browser; the extension POSTs new
+// Local companion service for the "Apply Tracker" extension. Run this
+// alongside the browser; the extension POSTs new
 // applications here and this process appends them straight into the
 // tracker workbook — no browser downloads, no visible notifications.
 //
@@ -1087,7 +1087,7 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, '127.0.0.1', () => {
-  console.log(`LinkedIn Opera Applets save-server listening on http://127.0.0.1:${PORT}`);
+  console.log(`Apply Tracker save-server listening on http://127.0.0.1:${PORT}`);
   console.log(`Writing to: ${OUTPUT_PATH}`);
   console.log(`Backing up to: ${BACKUP_PATH} every 30 minutes`);
   console.log('Leave this window open while you use the extension. Ctrl+C to stop.');

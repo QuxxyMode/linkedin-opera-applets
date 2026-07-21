@@ -1,4 +1,4 @@
-# LinkedIn: Hide Applied/Viewed Jobs
+# Apply Tracker
 
 *[Русская версия](README.ru.md)*
 
@@ -28,7 +28,7 @@ Details on each step below.
 
 1. Open your browser's extensions page: `opera://extensions`, `chrome://extensions`, or `edge://extensions`.
 2. Turn on **Developer mode** (toggle, usually top-right).
-3. Click **Load unpacked** and select this folder (`LinkedIn Opera Applets`).
+3. Click **Load unpacked** and select the folder you cloned/downloaded this into.
 4. Open LinkedIn → Jobs, or Indeed's job search - the popup icon is available on both.
 
 Identical on Windows, macOS, and Linux.

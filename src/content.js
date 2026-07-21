@@ -290,7 +290,7 @@
         },
         () => {
           if (chrome.runtime.lastError) {
-            console.warn('LinkedIn Opera Applets: link backfill failed', chrome.runtime.lastError.message);
+            console.warn('Apply Tracker: link backfill failed', chrome.runtime.lastError.message);
             sentBackfillKeys.delete(key);
           }
         }
@@ -331,7 +331,7 @@
 
     chrome.runtime.sendMessage({ type: 'JOB_INFO_UPDATE', jobId, source: 'LinkedIn', ...merged }, () => {
       if (chrome.runtime.lastError) {
-        console.warn('LinkedIn Opera Applets: info update failed', chrome.runtime.lastError.message);
+        console.warn('Apply Tracker: info update failed', chrome.runtime.lastError.message);
       }
     });
   }
@@ -448,7 +448,7 @@
     sentKeys.add(key);
     chrome.runtime.sendMessage({ type: 'JOB_SEEN', jobId, status, source: 'LinkedIn', cvVersion: selectedCvByJobId.get(jobId), ...info }, () => {
       if (chrome.runtime.lastError) {
-        console.warn('LinkedIn Opera Applets: sendMessage failed', chrome.runtime.lastError.message);
+        console.warn('Apply Tracker: sendMessage failed', chrome.runtime.lastError.message);
         sentKeys.delete(key);
       }
     });

@@ -1,5 +1,5 @@
 // Local companion service (see server/save-server.js) that appends new
-// applications straight into applied_jobs.xlsx over plain HTTP. Unlike the
+// applications straight into Applications log.xlsx over plain HTTP. Unlike the
 // old model, this extension no longer holds the full application history —
 // only a small queue of records it hasn't managed to append yet
 // (`pendingRecords`), cleared out as soon as each one lands on disk. That
@@ -249,7 +249,7 @@ async function openFile() {
 let queue = Promise.resolve();
 function enqueue(task) {
   const result = queue.then(task);
-  queue = result.catch((e) => console.error('LinkedIn Opera Applets: task failed', e));
+  queue = result.catch((e) => console.error('Apply Tracker: task failed', e));
   return result;
 }
 

@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "LinkedIn: Hide Applied/Viewed Jobs",
+  "name": "Apply Tracker",
   "version": "1.0.0",
-  "description": "Hides/shows LinkedIn jobs marked Applied/Viewed, lets you mark Indeed jobs as applied, and keeps a combined Excel log of your applications.",
+  "description": "Hides/shows Applied/Viewed jobs on LinkedIn, tracks applications on Indeed and any other job site, and keeps a combined Excel log of your applications.",
   "permissions": ["storage", "alarms"],
   "host_permissions": ["<all_urls>"],
   "background": {
@@ -32,6 +32,6 @@
   ],
   "action": {
     "default_popup": "src/popup.html",
-    "default_title": "LinkedIn Applied/Viewed"
+    "default_title": "Apply Tracker"
   }
 }

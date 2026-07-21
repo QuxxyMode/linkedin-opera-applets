@@ -3,8 +3,8 @@ import stat
 import zipfile
 
 ROOT = r"D:\Ideas\LinkedIn Opera Applets"
-OUT = os.path.join(ROOT, "dist", "LinkedIn-Opera-Applets.zip")
-TOP = "LinkedIn Opera Applets"
+OUT = os.path.join(ROOT, "dist", "Apply-Tracker.zip")
+TOP = "Apply Tracker"
 
 # Explicit allowlist - do NOT just glob everything, so the user's real
 # application tracker (Трекер откликов - AB тест.xlsx and its .backup.xlsx),

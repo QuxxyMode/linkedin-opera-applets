@@ -267,7 +267,7 @@
       },
       () => {
         if (chrome.runtime.lastError) {
-          console.warn(`LinkedIn Opera Applets (${SITE_KEY}): sendMessage failed`, chrome.runtime.lastError.message);
+          console.warn(`Apply Tracker (${SITE_KEY}): sendMessage failed`, chrome.runtime.lastError.message);
         }
       }
     );
